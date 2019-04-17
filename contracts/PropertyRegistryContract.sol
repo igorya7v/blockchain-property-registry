@@ -1,4 +1,4 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.5.0;
 
 contract PropertyRegistryContract {
 
@@ -20,22 +20,9 @@ contract PropertyRegistryContract {
 
     mapping(uint => PropertyDetails) public propertiesMap;
 
-    modifier isContractOwner() {
+    function addProperty(string propertyAddress) public {
+
         require(msg.sender == contractOwner);
-        _;
-    }
-
-    modifier isNewProperty(uint propertyId) {
-        require(propertiesMap[propertyId].owner == 0x0);
-        _;
-    }
-
-    modifier isPropertyOwner(uint propertyId, address owner) {
-        require(propertiesMap[propertyId].owner == owner);
-        _;
-    }
-
-    function addProperty(string propertyAddress) public isContractOwner {
 
         uint id = properties.length;
         PropertyDetails newProperty = PropertyDetails(id, propertyAddress, 0x0);
@@ -45,20 +32,20 @@ contract PropertyRegistryContract {
         emit NewPropertyAdded(id, propertyAddress);
     }
 
-    function setPropertyOwnership(
-        byte32 propertyId,
-        address owner
-    ) public isContractOwner isNewProperty(propertyId) {
+    function setPropertyOwnership(byte32 propertyId, address owner) public {
+
+        require(msg.sender == contractOwner);
+
+        require(propertiesMap[propertyId].owner == 0x0);
 
         propertiesMap[propertyId].owner = owner;
 
         emit PropertyOwnershipSet(propertyId, owner);
     }
 
-    function transferPropertyOwnership(
-        byte32 propertyId,
-        address newOwner
-    ) public isPropertyOwner(propertyId, msg.sender) {
+    function transferPropertyOwnership(byte32 propertyId, address newOwner) public {
+
+        require(propertiesMap[propertyId].owner == msg.sender);
 
         propertiesMap[propertyId].owner = newOwner;
 
