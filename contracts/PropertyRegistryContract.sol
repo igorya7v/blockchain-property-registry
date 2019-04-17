@@ -18,7 +18,9 @@ contract PropertyRegistryContract {
 
     PropertyDetails[] public properties;
 
-    mapping(uint => PropertyDetails) public propertiesMap;
+    constructor() public {
+        contractOwner = msg.sender;
+    }
 
     function addProperty(string memory propertyAddress) public {
 
@@ -27,7 +29,6 @@ contract PropertyRegistryContract {
         uint id = properties.length;
         PropertyDetails memory newProperty = PropertyDetails(id, propertyAddress, address(0));
         properties.push(newProperty);
-        propertiesMap[id] = newProperty;
 
         emit NewPropertyAdded(id, propertyAddress);
     }
@@ -36,18 +37,18 @@ contract PropertyRegistryContract {
 
         require(msg.sender == contractOwner);
 
-        require(propertiesMap[propertyId].owner == address(0));
+        require(properties[propertyId].owner == address(0));
 
-        propertiesMap[propertyId].owner = owner;
+        properties[propertyId].owner = owner;
 
         emit PropertyOwnershipSet(propertyId, owner);
     }
 
     function transferPropertyOwnership(uint propertyId, address newOwner) public {
 
-        require(propertiesMap[propertyId].owner == msg.sender);
+        require(properties[propertyId].owner == msg.sender);
 
-        propertiesMap[propertyId].owner = newOwner;
+        properties[propertyId].owner = newOwner;
 
         emit PropertyOwnershipTransferred(propertyId, msg.sender, newOwner);
     }
