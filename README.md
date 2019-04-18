@@ -10,11 +10,9 @@ The property management system is a service which maintains the records of the R
 
 In order to keep things simple we will define a very simplified requirements:
 
-1. Only the Owner of the Smart Contract can transfer the contract ownership to a new owner.
+1. Only the Owner of the Smart Contract can record (input) a new property into the system.
 
-2. Only the Owner of the Smart Contract can record (input) a new property into the system.
+2. Only the Owner of the Smart Contract can assign an initial owner of the property.
 
-3. Only the Owner of the Smart Contract can assign an initial owner of the property.
-
-4. Only the Owner of the Property can transfer the property ownership to a new owner.  
+3. Only the Owner of the Property can transfer the property ownership to a new owner.  
 
