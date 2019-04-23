@@ -48,7 +48,7 @@ contract PropertyRegistryContract {
     }
 
 
-    function setPropertyOwnership(uint propertyId, address owner) public {
+    function setPropertyInitialOwnership(uint propertyId, address owner) public {
 
         // This function can ONLY be used by the owner of the contract.
         require(msg.sender == contractOwner);
