@@ -13,9 +13,9 @@ contract PropertyRegistryContract {
 
 
     struct PropertyDetails {
-        uint id;
+        uint propertyId;
         string propertyAddress;
-        address owner;
+        address propertyOwner;
     }
 
 
