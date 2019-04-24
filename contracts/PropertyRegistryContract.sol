@@ -2,14 +2,14 @@ pragma solidity ^0.5.0;
 
 contract PropertyRegistryContract {
 
-    event NewPropertyAdded(uint indexed id, string indexed propertyAddress);
+    event NewPropertyAdded(uint indexed propertyId, string indexed propertyAddress);
 
-    event PropertyOwnershipSet(uint indexed propertyId, address indexed owner);
+    event PropertyOwnershipSet(uint indexed propertyId, address indexed propertyOwner);
 
     event PropertyOwnershipTransferred(
         uint indexed propertyId,
-        address indexed previousOwner,
-        address indexed newOwner);
+        address indexed previousPropertyOwner,
+        address indexed newPropertyOwner);
 
 
     struct PropertyDetails {
@@ -35,44 +35,44 @@ contract PropertyRegistryContract {
         require(msg.sender == contractOwner);
 
         // Assign the property id as an index in the array of properties for easy mapping.
-        uint id = properties.length;
+        uint propertyId = properties.length;
 
         // Initialise a new Property instance.
-        PropertyDetails memory newProperty = PropertyDetails(id, propertyAddress, address(0));
+        PropertyDetails memory newProperty = PropertyDetails(propertyId, propertyAddress, address(0));
 
         // Add the new property to the array of properties.
         properties.push(newProperty);
 
         // Emmit the new property added event for logging.
-        emit NewPropertyAdded(id, propertyAddress);
+        emit NewPropertyAdded(propertyId, propertyAddress);
     }
 
 
-    function setPropertyInitialOwnership(uint propertyId, address owner) public {
+    function setInitialPropertyOwner(uint propertyId, address initialPropertyOwner) public {
 
         // This function can ONLY be used by the owner of the contract.
         require(msg.sender == contractOwner);
 
         // This function can be called ONLY if the property hasn't had an owner yet.
-        require(properties[propertyId].owner == address(0));
+        require(properties[propertyId].propertyOwner == address(0));
 
         // Set the initial property owner.
-        properties[propertyId].owner = owner;
+        properties[propertyId].propertyOwner = initialPropertyOwner;
 
         // Emit the property ownership set event for logging.
-        emit PropertyOwnershipSet(propertyId, owner);
+        emit PropertyOwnershipSet(propertyId, initialPropertyOwner);
     }
 
 
-    function transferPropertyOwnership(uint propertyId, address newOwner) public {
+    function transferPropertyOwnership(uint propertyId, address newPropertyOwner) public {
 
         // This function can ONLY be used by the current property owner.
-        require(properties[propertyId].owner == msg.sender);
+        require(properties[propertyId].propertyOwner == msg.sender);
 
         // Set the new owner.
-        properties[propertyId].owner = newOwner;
+        properties[propertyId].propertyOwner = newPropertyOwner;
 
         // Emmit the property ownership transferred event for logging.
-        emit PropertyOwnershipTransferred(propertyId, msg.sender, newOwner);
+        emit PropertyOwnershipTransferred(propertyId, msg.sender, newPropertyOwner);
     }
 }
