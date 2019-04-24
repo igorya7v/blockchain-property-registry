@@ -2,9 +2,9 @@ pragma solidity ^0.5.0;
 
 contract PropertyRegistryContract {
 
-    event NewPropertyAdded(uint indexed propertyId, string indexed propertyAddress);
+    event NewPropertyRegistered(uint indexed propertyId, string indexed propertyAddress);
 
-    event PropertyOwnershipSet(uint indexed propertyId, address indexed propertyOwner);
+    event PropertyInitialOwnerWasSet(uint indexed propertyId, address indexed propertyOwner);
 
     event PropertyOwnershipTransferred(
         uint indexed propertyId,
@@ -29,7 +29,7 @@ contract PropertyRegistryContract {
     }
 
 
-    function addProperty(string memory propertyAddress) public {
+    function RegisterNewProperty(string memory propertyAddress) public {
 
         // This function can ONLY be used by the owner of the contract.
         require(msg.sender == contractOwner);
@@ -44,7 +44,7 @@ contract PropertyRegistryContract {
         properties.push(newProperty);
 
         // Emmit the new property added event for logging.
-        emit NewPropertyAdded(propertyId, propertyAddress);
+        emit NewPropertyRegistered(propertyId, propertyAddress);
     }
 
 
@@ -60,7 +60,7 @@ contract PropertyRegistryContract {
         properties[propertyId].propertyOwner = initialPropertyOwner;
 
         // Emit the property ownership set event for logging.
-        emit PropertyOwnershipSet(propertyId, initialPropertyOwner);
+        emit PropertyInitialOwnerWasSet(propertyId, initialPropertyOwner);
     }
 
 
